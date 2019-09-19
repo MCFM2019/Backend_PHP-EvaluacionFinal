@@ -68,8 +68,42 @@ function PeticionAjax(idSelector,descripcion){
   })
 }
 
+function MuestraResultadosEnPantallaConPeticionAjax(fCiudad,fTipo,fPrecMin,fPrecMax){
+  var fd=new FormData();
+  fd.append('ciudad',fCiudad);
+  fd.append('tipo',fTipo);
+  fd.append('precMin',fPrecMin);
+  fd.append('precMax',fPrecMax);
+
+  $.ajax({
+    url:'buscador.php',
+    type:'POST',
+    data:fd,
+    processData:false,
+    contentType:false
+  }).done(function(data){
+    $(".casaVista").remove();
+    $(".colContenido").append(data);
+  })
+}
+
 $(document).ready(function(){
   // Se cargan las opciones de la ciudad y tipo mediante la peticion AJAX
   PeticionAjax($('#selectCiudad'),'Ciudad');
-  PeticionAjax($('#selectTipo'),'Tipo');  
+  PeticionAjax($('#selectTipo'),'Tipo');
+
+  // Los 2 botones hacen lo mismo, asi que se usará un solo método en el que se le pasarán filtros o cargará todo
+  $('#mostrarTodos').click(function(){
+    MuestraResultadosEnPantallaConPeticionAjax('','','0','100000');
+  })
+
+  $('#submitButton').click(function(event){
+    event.preventDefault();
+    var fCiudad = $("#selectCiudad").val();
+    var fTipo = $("#selectTipo").val();
+    var fPrecMin = $("#rangoPrecio").val().split(";")[0];
+    var fPrecMax = $("#rangoPrecio").val().split(";")[1];
+
+    MuestraResultadosEnPantallaConPeticionAjax(fCiudad,fTipo,fPrecMin,fPrecMax);
+  })
 })

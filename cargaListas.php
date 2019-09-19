@@ -7,10 +7,11 @@ try
   $file=fopen($archivo,'r');
   $response=fread($file,filesize($archivo));
 
-  $propiedades = json_decode($response,true);
+  //Se devuelve el arreglo con los datos JSON
+  $arrJSON = json_decode($response,true);
   $arrElementos=[];
   // Se recorre el archivo JSON para obtener sólo la propiedad que se está consultando
-  foreach ($propiedades as $valor) {
+  foreach ($arrJSON as $valor) {
     array_push($arrElementos,$valor[$propiedadJSON]);
   }
   // Se quitan los elementos repetidos

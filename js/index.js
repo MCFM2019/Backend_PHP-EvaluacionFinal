@@ -50,3 +50,26 @@ function playVideoOnScroll(){
 
 inicializarSlider();
 playVideoOnScroll();
+
+function PeticionAjax(idSelector,descripcion){
+  var nomarch='data-1.json';
+  var fd=new FormData();
+  fd.append('archivo',nomarch);
+  fd.append('propiedad',descripcion);
+
+  $.ajax({
+    url:'cargaListas.php',
+    type:'POST',
+    data:fd,
+    processData: false,
+    contentType: false
+  }).done(function(data){
+    idSelector.append(data).material_select();
+  })
+}
+
+$(document).ready(function(){
+  // Se cargan las opciones de la ciudad y tipo mediante la peticion AJAX
+  PeticionAjax($('#selectCiudad'),'Ciudad');
+  PeticionAjax($('#selectTipo'),'Tipo');  
+})
